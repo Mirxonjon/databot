@@ -7,7 +7,6 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { swaggerConfig } from './config/swagger';
 import * as cors from 'cors';
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(
@@ -27,7 +26,7 @@ async function bootstrap() {
 
   const host = config.getOrThrow<string>('app.host');
   const port = config.getOrThrow<number>('app.port');
-  
+
   await app.listen(port, host);
 }
 bootstrap();

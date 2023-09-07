@@ -7,11 +7,11 @@ import { UsersModule } from './module/users/users.module';
 // import { CategoryInfoModule } from './module/categories_Info/users.module';
 
 @Module({
-  imports: [ 
+  imports: [
     ConfigModule.forRoot(config),
     TypeOrmModule.forRoot(connectDb),
-    UsersModule
-    ],
+    UsersModule,
+  ],
   controllers: [],
   providers: [],
 })
