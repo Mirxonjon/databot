@@ -104,7 +104,6 @@ export class UsersController {
     },
   })
   async create(@Body() createusersdto: CreateUsersDto) {
-    console.log('olll');
     
     return await this.#_service.create(createusersdto);
   }
@@ -149,11 +148,9 @@ export class UsersController {
       @UploadedFile() file : Express.Multer.File ,
       @Body() body: {user_id: string} ,
       @Headers() header: any) {
-        console.log('okkk' ,body);
         
         if (file) {
           const link : string= await googleCloud(file)
-          console.log(link, 'immmmmmmmg')
           return await this.#_service.createImage(body, link )
         }
   }

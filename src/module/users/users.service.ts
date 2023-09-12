@@ -27,12 +27,12 @@ export class UsersService {
       })
       .execute()
       .catch((e) => {
+        console.log(e)
         throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
       });
   }
 
    async createImage(body:{user_id : string}, link: string) {
-    // https://storage.googleapis.com/telecom-storege_pic/
 
     const findUser = await UsersEntity.findOne({
       where: {
