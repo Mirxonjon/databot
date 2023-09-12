@@ -43,7 +43,11 @@ export class CreateUsersDto {
 
   @IsString()
   @IsNotEmpty()
-  skills: string;
+  image: string;
+
+  @IsString()
+  @IsNotEmpty()
+  experience: string;
 }
 
 export class LoginAdminDto {

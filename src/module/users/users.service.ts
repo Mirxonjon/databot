@@ -22,7 +22,8 @@ export class UsersService {
         lang_uz: body.lang_uz,
         lang_en: body.lang_en,
         comp: body.comp,
-        skills: body.skills,
+        experience: body.experience,
+        image: body.image
       })
       .execute()
       .catch((e) => {
@@ -30,8 +31,31 @@ export class UsersService {
       });
   }
 
+   async createImage(body:{user_id : string}, link: string) {
+    // https://storage.googleapis.com/telecom-storege_pic/
+
+    const findUser = await UsersEntity.findOne({
+      where: {
+        id: body.user_id,
+      },
+    }).catch(() => {
+      throw new HttpException('Not found', HttpStatus.BAD_REQUEST);
+    });
+    if (findUser) {
+      await UsersEntity.createQueryBuilder()
+        .update(UsersEntity)
+        .set({
+          image: `https://storage.googleapis.com/telecom-storege_pic/${link}` ,
+        })
+        .where({ id: findUser.id  })
+        .execute()
+        .catch(() => {
+          throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+        });
+    }
+   }
+
   async login(body: LoginAdminDto) {
-    console.log(body);
 
     const findAdmin = await AdminEntity.find({
       where: {
@@ -44,6 +68,7 @@ export class UsersService {
     if (!findAdmin.length) {
       throw new HttpException('Not Found', HttpStatus.BAD_REQUEST);
     }
+    console.log(findAdmin);
 
     const token = jwt.sign({ ...findAdmin }, 'dsfagds');
 

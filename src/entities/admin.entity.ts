@@ -14,4 +14,10 @@ export class AdminEntity extends BaseEntity {
     type: 'character varying',
   })
   password: string;
+
+  @Column({
+    type: 'character varying',
+  })
+  role: string;
+
 }

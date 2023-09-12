@@ -8,17 +8,26 @@ import {
   Post,
   Get,
   Query,
+  UseInterceptors,
+  UploadedFile,
+  Headers,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
+  ApiConsumes,
+  ApiCreatedResponse,
+  ApiHeader,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUsersDto, LoginAdminDto } from './dto/create-user.dto';
 import { UpdateUsersDto } from './dto/update-user.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { googleCloud } from 'src/utils/google_cloud';
 
 @Controller('users')
 @ApiTags('Users')
@@ -43,6 +52,8 @@ export class UsersController {
         'lang_ru',
         'lang_uz',
         'lang_en',
+        "experience",
+        "image"
       ],
       properties: {
         id: {
@@ -81,12 +92,72 @@ export class UsersController {
           type: 'string',
           default: 'Хорошее обучение',
         },
+        experience: {
+          type: 'string',
+          default: 'Хорошее обучение',
+        },
+        image: {
+          type: 'string',
+          default: 'Хорошее обучение',
+        },
       },
     },
   })
   async create(@Body() createusersdto: CreateUsersDto) {
+    console.log('olll');
+    
     return await this.#_service.create(createusersdto);
   }
+
+  
+  @Post('createimage')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiBody({
+      schema: {
+          type: 'object',
+          required: [
+              'file',
+              "user_id"
+          ],
+          properties: {
+            file: {
+              type: 'string',
+              format: "binary",
+            },
+          user_id: {
+              type: 'string',
+              default: 'Хорошее обучение',
+
+            }
+           
+          },
+        },
+
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({summary : 'Attendance Punch In'})
+  @ApiCreatedResponse()
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()  
+  @ApiHeader({
+    name: 'admin_token',
+    description: 'Admin token',
+    required: true,
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  async  createImage(
+      @UploadedFile() file : Express.Multer.File ,
+      @Body() body: {user_id: string} ,
+      @Headers() header: any) {
+        console.log('okkk' ,body);
+        
+        if (file) {
+          const link : string= await googleCloud(file)
+          console.log(link, 'immmmmmmmg')
+          return await this.#_service.createImage(body, link )
+        }
+  }
+
 
   @Post('login')
   // @HttpCode(HttpStatus.CREATED)

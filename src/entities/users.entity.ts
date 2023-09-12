@@ -3,9 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -70,8 +67,20 @@ export class UsersEntity extends BaseEntity {
 
   @Column({
     type: 'character varying',
+    nullable:true
   })
-  skills: string;
+  image: string;
+
+  @Column({
+    type: 'character varying',
+  })
+  experience: string;
+
+  @Column({
+    type: 'character varying',
+    nullable:true
+  })
+  dictation_image: string;
 
   @CreateDateColumn({ name: 'created_at' })
   create_data: Date;
