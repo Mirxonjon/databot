@@ -45,7 +45,7 @@ export class UsersService {
       await UsersEntity.createQueryBuilder()
         .update(UsersEntity)
         .set({
-          image: `https://storage.googleapis.com/telecom-storege_pic/${link}` ,
+          dictation_image: `https://storage.googleapis.com/telecom-storege_pic/${link}` ,
         })
         .where({ id: findUser.id  })
         .execute()
