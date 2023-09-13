@@ -57,7 +57,7 @@ export class UsersService {
 
   async login(body: LoginAdminDto) {
 
-    const findAdmin = await AdminEntity.find({
+    const findAdmin : AdminEntity[] = await AdminEntity.find({
       where: {
         name: body.name,
         password: body.password,
@@ -74,6 +74,7 @@ export class UsersService {
 
     return {
       token: token,
+      role :findAdmin[0].role,
       status: HttpStatus.OK,
     };
   }
