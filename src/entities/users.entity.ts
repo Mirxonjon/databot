@@ -82,6 +82,12 @@ export class UsersEntity extends BaseEntity {
   })
   dictation_image: string;
 
+  @Column({
+    type: 'character varying',
+    nullable:true
+  })
+  nameFile: string;
+
   @CreateDateColumn({ name: 'created_at' })
   create_data: Date;
 }

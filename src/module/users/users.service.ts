@@ -32,7 +32,7 @@ export class UsersService {
       });
   }
 
-   async createImage(body:{user_id : string}, link: string) {
+   async createImage(body:{user_id : string}, link: string , nameFile :string) {
 
     const findUser = await UsersEntity.findOne({
       where: {
@@ -46,6 +46,7 @@ export class UsersService {
         .update(UsersEntity)
         .set({
           dictation_image: `https://storage.googleapis.com/telecom-storege_pic/${link}` ,
+          nameFile : nameFile
         })
         .where({ id: findUser.id  })
         .execute()

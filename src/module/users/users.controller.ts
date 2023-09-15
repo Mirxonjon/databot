@@ -148,10 +148,12 @@ export class UsersController {
       @UploadedFile() file : Express.Multer.File ,
       @Body() body: {user_id: string} ,
       @Headers() header: any) {
+        console.log(file);
         
         if (file) {
+          const nameFile = file.originalname
           const link : string= await googleCloud(file)
-          return await this.#_service.createImage(body, link )
+          return await this.#_service.createImage(body, link ,nameFile )
         }
   }
 
