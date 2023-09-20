@@ -6,12 +6,10 @@ import { UpdateUsersDto } from './dto/update-user.dto';
 import { Like } from 'typeorm';
 import { AdminEntity } from 'src/entities/admin.entity';
 import * as jwt from 'jsonwebtoken';
-import puppeteer from 'puppeteer';
-import path from 'path';
-import * as fs from 'fs'
+
 import { googleCloud } from 'src/utils/google_cloud';
 import axios from 'axios';
-// import fetch from 'node-fetch';
+
 
 @Injectable()
 
