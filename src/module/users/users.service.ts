@@ -1,3 +1,4 @@
+
 import { UsersEntity } from 'src/entities/users.entity';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateUsersDto, LoginAdminDto } from './dto/create-user.dto';
@@ -5,9 +6,29 @@ import { UpdateUsersDto } from './dto/update-user.dto';
 import { Like } from 'typeorm';
 import { AdminEntity } from 'src/entities/admin.entity';
 import * as jwt from 'jsonwebtoken';
+import puppeteer from 'puppeteer';
+import path from 'path';
+import * as fs from 'fs'
+import { googleCloud } from 'src/utils/google_cloud';
+import axios from 'axios';
+// import fetch from 'node-fetch';
+
 @Injectable()
+
 export class UsersService {
   async create(body: CreateUsersDto) {
+    const {data} = await axios.get(`${body.image}`,{responseType: 'arraybuffer'})
+    const resume = await axios.get(body.resume , {responseType: 'arraybuffer'})
+     const Imagelink =  googleCloud( {
+      buffer : data,
+      originalname: `${body.name}.JPG`
+    })
+
+    const resumeLink =  googleCloud( {
+      buffer : resume.data,
+      originalname: `${body.name}.pdf`
+    })
+      
     await UsersEntity.createQueryBuilder()
       .insert()
       .into(UsersEntity)
@@ -23,7 +44,9 @@ export class UsersService {
         lang_en: body.lang_en,
         comp: body.comp,
         experience: body.experience,
-        image: body.image
+        image: `https://storage.googleapis.com/telecom-storege_pic/${Imagelink}`,
+        resumePdf: `https://storage.googleapis.com/telecom-storege_pic/${resumeLink}`
+
       })
       .execute()
       .catch((e) => {
@@ -57,7 +80,7 @@ export class UsersService {
    }
 
   async login(body: LoginAdminDto) {
-
+    
     const findAdmin : AdminEntity[] = await AdminEntity.find({
       where: {
         name: body.name,
@@ -130,4 +153,6 @@ export class UsersService {
 
     return allUsers;
   }
+
+
 }

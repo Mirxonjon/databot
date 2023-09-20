@@ -1,4 +1,5 @@
 import { IsString, IsNotEmpty, MaxLength } from 'class-validator';
+// import { isBuffer } from 'util';
 
 export class CreateUsersDto {
   @IsString()
@@ -48,6 +49,10 @@ export class CreateUsersDto {
   @IsString()
   @IsNotEmpty()
   experience: string;
+  @IsString()
+  @IsNotEmpty()
+  resume: string;
+
 }
 
 export class LoginAdminDto {

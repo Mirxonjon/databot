@@ -88,6 +88,12 @@ export class UsersEntity extends BaseEntity {
   })
   nameFile: string;
 
+  @Column({
+    type: 'character varying',
+    nullable:true
+  })
+  resumePdf: string;
+
   @CreateDateColumn({ name: 'created_at' })
   create_data: Date;
 }

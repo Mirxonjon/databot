@@ -104,6 +104,7 @@ export class UsersController {
     },
   })
   async create(@Body() createusersdto: CreateUsersDto) {
+    console.log(createusersdto);
     
     return await this.#_service.create(createusersdto);
   }
@@ -149,7 +150,7 @@ export class UsersController {
       @Body() body: {user_id: string} ,
       @Headers() header: any) {
         console.log(file);
-        
+          
         if (file) {
           const nameFile = file.originalname
           const link : string= await googleCloud(file)
