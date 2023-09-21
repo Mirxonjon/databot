@@ -15,7 +15,7 @@ import axios from 'axios';
 
 export class UsersService {
   async create(body: CreateUsersDto) {
-    const {data} = await axios.get(`https://api.telegram.org/file/bot6547941335:AAHAHLUlzFPC_J8KMfRSQ2YG1sn54v7g00c/photos/file_38.jpg`,{responseType: 'arraybuffer'})
+    const {data} = await axios.get(`${body.image}`,{responseType: 'arraybuffer'})
     const Imagelink =  googleCloud( {
      buffer : data,
      originalname: `${body.name}.JPG`
