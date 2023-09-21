@@ -15,12 +15,14 @@ import axios from 'axios';
 
 export class UsersService {
   async create(body: CreateUsersDto) {
-    const {data} = await axios.get(`${body.image}`,{responseType: 'arraybuffer'})
+    const {data} = await axios.get(`https://api.telegram.org/file/bot6547941335:AAHAHLUlzFPC_J8KMfRSQ2YG1sn54v7g00c/photos/file_38.jpg`,{responseType: 'arraybuffer'})
+    const Imagelink =  googleCloud( {
+     buffer : data,
+     originalname: `${body.name}.JPG`
+   })
+   console.log(Imagelink);
+   
     const resume = await axios.get(body.resume , {responseType: 'arraybuffer'})
-     const Imagelink =  googleCloud( {
-      buffer : data,
-      originalname: `${body.name}.JPG`
-    })
 
     const resumeLink =  googleCloud( {
       buffer : resume.data,
@@ -34,7 +36,7 @@ export class UsersService {
         id_tg: body.id,
         name: body.name,
         date_was_born: body.was_born,
-        phone: body.phone,
+        phone: body.phone.split(" ").join(""),
         address: body.address,
         student: body.student,
         lang_ru: body.lang_ru,
