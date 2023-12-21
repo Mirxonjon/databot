@@ -152,8 +152,8 @@ export class UsersService {
       .insert()
       .into(ImageDictationEntity)
       .values({
-        user: e.id,
-        image_link: e.image
+        user: e?.id,
+        image_link: e?.dictation_image || null
       })
       .execute()
       .catch((e) => {

@@ -20,11 +20,13 @@ import { UsersEntity } from './users.entity';
   
     @Column({
       type: 'character varying',
+      nullable:true
     })
     image_link: string;
 
     @Column({
         type: 'character varying',
+        nullable:true
       })
       name_file: string;
   
