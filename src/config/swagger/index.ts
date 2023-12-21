@@ -1,6 +1,6 @@
 import { DocumentBuilder } from '@nestjs/swagger';
 
 export const swaggerConfig = new DocumentBuilder()
-  .setTitle('LinCore project')
-  .setVersion('1.0')
+  .setTitle('Hr-dashboard project')
+  .setVersion('2.0')
   .build();

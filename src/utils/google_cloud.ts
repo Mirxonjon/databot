@@ -18,7 +18,6 @@ export const googleCloud = (file: any | any[]) => {
   const blobStream = blob.createWriteStream();
 
   blobStream.on('error', (err) => {
-    console.log(err );
   });
 
   blobStream.end(a[0]?.buffer);

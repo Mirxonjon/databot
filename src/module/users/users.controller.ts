@@ -104,105 +104,20 @@ export class UsersController {
     },
   })
   async create(@Body() createusersdto: CreateUsersDto) {
-    console.log(createusersdto);
     
     return await this.#_service.create(createusersdto);
   }
 
   
-  @Post('createimage')
-  @HttpCode(HttpStatus.CREATED)
-  @ApiBody({
-      schema: {
-          type: 'object',
-          required: [
-              'file',
-              "user_id"
-          ],
-          properties: {
-            file: {
-              type: 'string',
-              format: "binary",
-            },
-          user_id: {
-              type: 'string',
-              default: 'Хорошее обучение',
-
-            }
-           
-          },
-        },
-
-  })
-  @ApiConsumes('multipart/form-data')
-  @ApiOperation({summary : 'Attendance Punch In'})
-  @ApiCreatedResponse()
-  @ApiBadRequestResponse()
-  @ApiNotFoundResponse()  
-  @ApiHeader({
-    name: 'admin_token',
-    description: 'Admin token',
-    required: true,
-  })
-  @UseInterceptors(FileInterceptor('file'))
-  async  createImage(
-      @UploadedFile() file : Express.Multer.File ,
-      @Body() body: {user_id: string} ,
-      @Headers() header: any) {
-        console.log(file);
-          
-        if (file) {
-          const nameFile = file.originalname
-          const link : string= await googleCloud(file)
-          return await this.#_service.createImage(body, link ,nameFile )
-        }
-  }
-
-
-  @Post('login')
-  // @HttpCode(HttpStatus.CREATED)
-  @ApiBody({
-    schema: {
-      type: 'object',
-      required: ['name', 'password'],
-      properties: {
-        name: {
-          type: 'string',
-          default: 'Eshmat',
-        },
-        password: {
-          type: 'string',
-          default: '123456789',
-        },
-      },
-    },
-  })
-  async login(@Body() loginadmindto: LoginAdminDto) {
-    return await this.#_service.login(loginadmindto);
-  }
-  @Patch('/update/:id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        status: {
-          type: 'string',
-          default: 'Texni',
-        },
-      },
-    },
-  })
-  async update(@Param('id') id: string, @Body() updateuserdto: UpdateUsersDto) {
-    return this.#_service.update(id, updateuserdto);
-  }
-
   @Get('all')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  async findAll() {
-    return await this.#_service.findAll();
+  async findAll(
+    @Query('pageNumber') pageNumber: number,
+    @Query('pageSize') pageSize: number,
+  ) {
+    return await this.#_service.findAll(pageNumber, pageSize);
   }
 
   @Get('/findByFilter/users?')
@@ -213,7 +128,19 @@ export class UsersController {
     @Query('name') name: string,
     @Query('phone') phone: string,
     @Query('status') status: string,
+    @Query('pageNumber') pageNumber: number,
+    @Query('pageSize') pageSize: number,
   ) {
-    return await this.#_service.findbyFilter(name, phone, status);
+    return await this.#_service.findbyFilter(name, phone, status ,pageNumber ,pageSize);
+  }
+
+
+  @Get('olddata')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findOld(
+  ) {
+    return await this.#_service.findOll();
   }
 }

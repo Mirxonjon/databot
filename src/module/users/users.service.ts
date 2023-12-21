@@ -8,7 +8,8 @@ import { AdminEntity } from 'src/entities/admin.entity';
 import * as jwt from 'jsonwebtoken';
 
 import { googleCloud } from 'src/utils/google_cloud';
-import axios from 'axios';
+import axios, { Axios } from 'axios';
+import { ImageDictationEntity } from 'src/entities/images.entity';
 
 
 @Injectable()
@@ -20,7 +21,6 @@ export class UsersService {
      buffer : data,
      originalname: `${body.name}.JPG`
    })
-   console.log(Imagelink);
    
     const resume = await axios.get(body.resume , {responseType: 'arraybuffer'})
 
@@ -28,7 +28,6 @@ export class UsersService {
       buffer : resume.data,
       originalname: `${body.name}.pdf`
     })
-      
     await UsersEntity.createQueryBuilder()
       .insert()
       .into(UsersEntity)
@@ -50,34 +49,10 @@ export class UsersService {
       })
       .execute()
       .catch((e) => {
-        console.log(e)
         throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
       });
   }
 
-   async createImage(body:{user_id : string}, link: string , nameFile :string) {
-
-    const findUser = await UsersEntity.findOne({
-      where: {
-        id: body.user_id,
-      },
-    }).catch(() => {
-      throw new HttpException('Not found', HttpStatus.BAD_REQUEST);
-    });
-    if (findUser) {
-      await UsersEntity.createQueryBuilder()
-        .update(UsersEntity)
-        .set({
-          dictation_image: `https://storage.googleapis.com/telecom-storege_pic/${link}` ,
-          nameFile : nameFile
-        })
-        .where({ id: findUser.id  })
-        .execute()
-        .catch(() => {
-          throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
-        });
-    }
-   }
 
   async login(body: LoginAdminDto) {
     
@@ -92,7 +67,6 @@ export class UsersService {
     if (!findAdmin.length) {
       throw new HttpException('Not Found', HttpStatus.BAD_REQUEST);
     }
-    console.log(findAdmin);
 
     const token = jwt.sign({ ...findAdmin }, 'dsfagds');
 
@@ -102,56 +76,95 @@ export class UsersService {
       status: HttpStatus.OK,
     };
   }
-  async update(id: string, body: UpdateUsersDto) {
-    const findUser = await UsersEntity.findOne({
-      where: {
-        id: id,
-      },
-    }).catch(() => {
-      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
-    });
 
-    if (findUser) {
-      await UsersEntity.createQueryBuilder()
-        .update(UsersEntity)
-        .set({
-          status: body.status || findUser.status,
-        })
-        .where({ id })
-        .execute()
-        .catch(() => {
-          throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
-        });
-    }
-  }
 
-  async findAll() {
-    const allUsers = await UsersEntity.find({
+  async findAll(pageNumber = 1, pageSize = 10) {
+
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await UsersEntity.findAndCount({
       order: {
         create_data: 'DESC',
       },
-    }).catch(() => {
-      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+      relations : {
+        images: true
+      },
+      skip: offset,
+      take: pageSize,
     });
 
-    return allUsers;
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
   }
 
-  async findbyFilter(name: string, phone: string, status: string) {
-    const allUsers = await UsersEntity.find({
+  async findbyFilter(name: string, phone: string, status: string ,pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await UsersEntity.findAndCount({
       where: {
         name: name == 'null' ? null : Like(`%${name.toUpperCase()}%`),
         phone: phone == 'null' ? null : Like(`%${phone}%`),
-        status: status == 'null' ? null : status,
+        status: status == 'null' ? null : status == 'all' ? null : status,
       },
       order: {
         create_data: 'DESC',
       },
+      relations : {
+        images: true
+      },
+      skip: offset,
+      take: pageSize,
     }).catch(() => {
       throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    });;
+
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
+
+  }
+
+  async findOll() {
+    console.log('okk');
+    const  fetchOlddata:any =await axios.get('https://api.ccenter.uz/api/v1/users/all').catch(e=> {console.log(e)})
+
+    console.log(fetchOlddata.data);
+
+    fetchOlddata?.data?.forEach(async e => {
+     await ImageDictationEntity.createQueryBuilder()
+      .insert()
+      .into(ImageDictationEntity)
+      .values({
+        user: e.id,
+        image_link: e.image
+      })
+      .execute()
+      .catch((e) => {
+        throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+      });
     });
 
-    return allUsers;
+
+
+    return 'okk'
+    
   }
 
 

@@ -3,8 +3,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { ImageDictationEntity } from './images.entity';
 
 @Entity()
 export class UsersEntity extends BaseEntity {
@@ -92,8 +94,24 @@ export class UsersEntity extends BaseEntity {
     type: 'character varying',
     nullable:true
   })
+  Comment: string;
+
+  @Column({
+    type: 'character varying',
+    nullable:true
+  })
   resumePdf: string;
 
   @CreateDateColumn({ name: 'created_at' })
   create_data: Date;
+
+
+  @OneToMany(
+    () => ImageDictationEntity,
+    (image) => image.user,
+    {
+      cascade: true,
+    },
+  )
+  images: ImageDictationEntity[];
 }
