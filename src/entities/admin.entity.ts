@@ -19,5 +19,4 @@ export class AdminEntity extends BaseEntity {
     type: 'character varying',
   })
   role: string;
-
 }

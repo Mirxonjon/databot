@@ -52,8 +52,8 @@ export class UsersController {
         'lang_ru',
         'lang_uz',
         'lang_en',
-        "experience",
-        "image"
+        'experience',
+        'image',
       ],
       properties: {
         id: {
@@ -104,11 +104,9 @@ export class UsersController {
     },
   })
   async create(@Body() createusersdto: CreateUsersDto) {
-    
     return await this.#_service.create(createusersdto);
   }
 
-  
   @Get('all')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
@@ -131,16 +129,12 @@ export class UsersController {
     @Query('pageNumber') pageNumber: number,
     @Query('pageSize') pageSize: number,
   ) {
-    return await this.#_service.findbyFilter(name, phone, status ,pageNumber ,pageSize);
-  }
-
-
-  @Get('olddata')
-  @ApiBadRequestResponse()
-  @ApiNotFoundResponse()
-  @ApiOkResponse()
-  async findOld(
-  ) {
-    return await this.#_service.findOll();
+    return await this.#_service.findbyFilter(
+      name,
+      phone,
+      status,
+      pageNumber,
+      pageSize,
+    );
   }
 }

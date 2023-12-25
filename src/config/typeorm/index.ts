@@ -13,7 +13,7 @@ export const connectDb: TypeOrmModuleOptions = {
   password: String(process.env.DB_PASSWORD),
   username: process.env.DB_USERNAME,
   database: process.env.DATABASE,
-  entities: [UsersEntity, AdminEntity , ImageDictationEntity,],
+  entities: [UsersEntity, AdminEntity, ImageDictationEntity],
   autoLoadEntities: true,
   synchronize: true,
 };

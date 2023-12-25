@@ -12,7 +12,7 @@ import { AdminModule } from './module/admin/admin.module';
     ConfigModule.forRoot(config),
     TypeOrmModule.forRoot(connectDb),
     UsersModule,
-    AdminModule
+    AdminModule,
   ],
   controllers: [],
   providers: [],

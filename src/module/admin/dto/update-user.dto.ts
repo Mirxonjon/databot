@@ -5,3 +5,8 @@ export class UpdateUsersDto {
   @IsNotEmpty()
   status: string;
 }
+
+export class UpdateCommentDto {
+  @IsString()
+  comment: string;
+}

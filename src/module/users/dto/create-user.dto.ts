@@ -52,7 +52,6 @@ export class CreateUsersDto {
   @IsString()
   @IsNotEmpty()
   resume: string;
-
 }
 
 export class LoginAdminDto {

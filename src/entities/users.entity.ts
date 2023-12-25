@@ -69,7 +69,7 @@ export class UsersEntity extends BaseEntity {
 
   @Column({
     type: 'character varying',
-    nullable:true
+    nullable: true,
   })
   image: string;
 
@@ -80,38 +80,33 @@ export class UsersEntity extends BaseEntity {
 
   @Column({
     type: 'character varying',
-    nullable:true
+    nullable: true,
   })
   dictation_image: string;
 
   @Column({
     type: 'character varying',
-    nullable:true
+    nullable: true,
   })
   nameFile: string;
 
   @Column({
     type: 'character varying',
-    nullable:true
+    nullable: true,
   })
   Comment: string;
 
   @Column({
     type: 'character varying',
-    nullable:true
+    nullable: true,
   })
   resumePdf: string;
 
   @CreateDateColumn({ name: 'created_at' })
   create_data: Date;
 
-
-  @OneToMany(
-    () => ImageDictationEntity,
-    (image) => image.user,
-    {
-      cascade: true,
-    },
-  )
+  @OneToMany(() => ImageDictationEntity, (image) => image.user, {
+    cascade: true,
+  })
   images: ImageDictationEntity[];
 }
