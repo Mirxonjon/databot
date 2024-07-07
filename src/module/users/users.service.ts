@@ -13,6 +13,8 @@ import { ImageDictationEntity } from 'src/entities/images.entity';
 @Injectable()
 export class UsersService {
   async create(body: CreateUsersDto) {
+    console.log(body.image);
+    
     const { data } = await axios.get(`${body.image}`, {
       responseType: 'arraybuffer',
     });
@@ -24,6 +26,7 @@ export class UsersService {
     const resume = await axios.get(body.resume, {
       responseType: 'arraybuffer',
     });
+    console.log(body.image ,'li', Imagelink , 'pdf ' , body.resume);
 
     const resumeLink = googleCloud({
       buffer: resume.data,
