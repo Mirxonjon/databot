@@ -148,7 +148,7 @@ export class AdminService {
   }
 
 
-  async remove(@Param('id') id: string): Promise<void> {
+  async remove( id: string): Promise<void> {
     const findSubCatgory = await UsersEntity.findOneBy({
       id,
     }).catch(() => {
