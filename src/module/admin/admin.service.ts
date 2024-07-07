@@ -9,6 +9,7 @@ import { AdminEntity } from 'src/entities/admin.entity';
 import * as jwt from 'jsonwebtoken';
 import { ImageDictationEntity } from 'src/entities/images.entity';
 import { UpdateCommentDto, UpdateUsersDto } from './dto/update-user.dto';
+import { ApiBadRequestResponse, ApiNoContentResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 
 @Injectable()
 export class AdminService {
@@ -144,5 +145,20 @@ export class AdminService {
           throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
         });
     }
+  }
+
+
+  async remove(@Param('id') id: string): Promise<void> {
+    const findSubCatgory = await UsersEntity.findOneBy({
+      id,
+    }).catch(() => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
+
+    if (!findSubCatgory) {
+      throw new HttpException('Sub Catgeory not found', HttpStatus.NOT_FOUND);
+    }
+
+    await UsersEntity.delete({ id });
   }
 }

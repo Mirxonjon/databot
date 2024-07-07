@@ -174,4 +174,13 @@ export class adminController {
   async update(@Param('id') id: string, @Body() updateuserdto: UpdateUsersDto) {
     return this.#_service.update(id, updateuserdto);
   }
+
+  @Delete('/delete/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiNoContentResponse()
+  async remove(@Param('id') id: string): Promise<void> {
+    await this.#_service.remove(id);
+  }
 }
