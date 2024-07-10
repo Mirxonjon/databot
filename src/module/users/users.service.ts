@@ -14,7 +14,9 @@ import { ImageDictationEntity } from 'src/entities/images.entity';
 export class UsersService {
   async create(body: CreateUsersDto) {
     console.log(body.image);
-    
+    try {
+      
+
     const { data } = await axios.get(`${body.image}`, {
       responseType: 'arraybuffer',
     });
@@ -54,6 +56,11 @@ export class UsersService {
       .catch((e) => {
         throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
       });
+    } catch (error) {
+      console.log(error);
+      
+    }
+    
   }
 
   async login(body: LoginAdminDto) {
